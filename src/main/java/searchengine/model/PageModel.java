@@ -6,6 +6,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "page", indexes = {@Index(name = "path_site", columnList = "path")})
@@ -26,8 +27,8 @@ public class PageModel implements Serializable {
     @Column(columnDefinition = "MEDIUMTEXT")
     private String content;
 
-    /*@OneToMany(mappedBy = "page", cascade = CascadeType.ALL)
-    private List<IndexModel> index = new ArrayList<>();*/
+    @OneToMany(mappedBy = "page", cascade = CascadeType.ALL)
+    private List<IndexModel> index = new ArrayList<>();
 
     public PageModel(SiteModel siteId, String path, int code, String content) {
         this.siteId = siteId;
@@ -37,5 +38,27 @@ public class PageModel implements Serializable {
     }
 
     // add override hashcode, equals, toString
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        PageModel pageModel = (PageModel) obj;
+        return id == pageModel.id && code == pageModel.code &&
+                siteId.equals(pageModel.siteId) &&
+                path.equals(pageModel.path) &&
+                content.equals(pageModel.content) &&
+                index.equals(pageModel.index);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, siteId, path, code, content, index);
+    }
+
+    @Override
+    public String toString() {
+        return "PageModel[" + "id=" + id + ", siteId=" + siteId + ", path='" + path + '\'' +
+                ", code=" + code + ", content='" + content + '\'' + ", index=" + index + ']';
+    }
 }
 

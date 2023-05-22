@@ -8,7 +8,7 @@ spring:
     password: dunge0n9669z@Rt
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     show-sql: true
 
 indexing-settings:
